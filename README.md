@@ -106,18 +106,6 @@ Extra options (e.g. setting the HTTP keep alive timeout) to pass to Jenkins on s
 
 Extra Java options for the Jenkins launch command configured via `JENKINS_JAVA_OPTS` in the systemd override.conf file can be set with the var `jenkins_java_options`. For example, if you want to configure the timezone Jenkins uses, add `-Dorg.apache.commons.jelly.tags.fmt.timeZone=America/New_York`. By default, the option to disable the Jenkins 2.0 setup wizard is added.
 
-    jenkins_init_changes:
-      - option: "JENKINS_OPTS"
-        value: "{{ jenkins_options }}"
-      - option: "JAVA_OPTS"
-        value: "{{ jenkins_java_options }}"
-      - option: "JENKINS_HOME"
-        value: "{{ jenkins_home }}"
-      - option: "JENKINS_PREFIX"
-        value: "{{ jenkins_url_prefix }}"
-      - option: "JENKINS_PORT"
-        value: "{{ jenkins_http_port }}"
-
 Changes made to the Jenkins systemd override.conf file; the default set of changes set the configured URL prefix, Jenkins home directory, Jenkins port and adds the configured Jenkins and Java options for Jenkins' startup. You can add other option/value pairs if you need to set other options for the Jenkins systemd override.conf file.
 
     jenkins_proxy_host: ""

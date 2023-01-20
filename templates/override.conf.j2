@@ -1,0 +1,14 @@
+[Service]
+User={{ jenkins_process_user }}
+Group={{ jenkins_process_group }}
+
+Environment="JENKINS_HOME={{ jenkins_home }}"
+WorkingDirectory={{ jenkins_home }}
+
+Environment="JENKINS_OPTS={{ jenkins_options }}"
+Environment="JENKINS_PREFIX={{ jenkins_url_prefix }}"
+Environment="JENKINS_PORT={{ jenkins_http_port }}"
+Environment="JAVA_OPTS=-Djava.awt.headless=true {{ jenkins_java_options }}"
+
+Environment="JENKINS_WEBROOT=/var/cache/jenkins/war"
+Environment="JENKINS_LOG=/var/log/jenkins/jenkins.log

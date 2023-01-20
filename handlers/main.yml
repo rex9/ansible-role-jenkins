@@ -1,12 +1,10 @@
 ---
+
+- name: daemon reload
+  systemd:
+    daemon_reload: yes
+  when: ansible_os_family == 'RedHat'
+    and ansible_distribution_major_version >= '7'
+
 - name: restart jenkins
   service: name=jenkins state=restarted
-
-- name: configure default users
-  template:
-    src: basic-security.groovy.j2
-    dest: "{{ jenkins_home }}/init.groovy.d/basic-security.groovy"
-    owner: "{{ jenkins_process_user }}"
-    group: "{{ jenkins_process_group }}"
-    mode: 0775
-  register: jenkins_users_config

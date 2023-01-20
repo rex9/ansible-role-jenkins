@@ -8,6 +8,11 @@
     jenkins_repo_url: "{{ __jenkins_repo_url }}"
   when: jenkins_repo_url is not defined
 
+- name: Define jenkins_repo_baseurl
+  set_fact:
+    jenkins_repo_baseurl: "{{ __jenkins_repo_baseurl }}"
+  when: jenkins_repo_baseurl is not defined
+
 - name: Define jenkins_repo_key_url
   set_fact:
     jenkins_repo_key_url: "{{ __jenkins_repo_key_url }}"
@@ -27,6 +32,9 @@
 
 # Configure Jenkins init settings.
 - include_tasks: settings.yml
+
+- name: systemd daemon reload
+  systemd: daemon-reload=true
 
 # Make sure Jenkins starts, then configure Jenkins.
 - name: Ensure Jenkins is started and runs on startup.
@@ -58,10 +66,18 @@
   delay: 10
   check_mode: false
 
-- name: Remove Jenkins security init scripts after first startup.
-  file:
-    path: "{{ jenkins_home }}/init.groovy.d/basic-security.groovy"
-    state: absent
+- name: configure default users
+  template:
+    src: basic-security.groovy.j2
+    dest: "{{ jenkins_home }}/init.groovy.d/basic-security.groovy"
+    owner: "{{ jenkins_process_user }}"
+    group: "{{ jenkins_process_group }}"
+    mode: 0775
+
+#- name: Remove Jenkins security init scripts after first startup.
+#  file:
+#    path: "{{ jenkins_home }}/init.groovy.d/basic-security.groovy"
+#    state: absent
 
 # Update Jenkins and install configured plugins.
 - include_tasks: plugins.yml
